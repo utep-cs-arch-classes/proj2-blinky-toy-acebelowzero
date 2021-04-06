@@ -11,7 +11,7 @@ AS              = msp430-elf-as
 all: projToy.elf 
 
 #additional rules for files
-projToy.elf: ${COMMON_OBJECTS} Main.o stateMachines.o led.o buzzer.o wdInterruptHandler.o ../lib/libTimer.a
+projToy.elf: ${COMMON_OBJECTS} Main.o stateMachines.o switches.o led.o buzzer.o wdInterruptHandler.o ../lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: projToy.elf
