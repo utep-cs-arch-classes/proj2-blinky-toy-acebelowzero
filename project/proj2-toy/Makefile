@@ -8,14 +8,14 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: blink.elf 
+all: projToy.elf 
 
 #additional rules for files
-blink.elf: ${COMMON_OBJECTS} Main.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a
+projToy.elf: ${COMMON_OBJECTS} Main.o stateMachines.o led.o buzzer.o wdInterruptHandler.o ../lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
-load: blink.elf
-	msp430loader.sh blink.elf
+load: projToy.elf
+	msp430loader.sh projToy.elf
 
 clean:
 	rm -f *.o *.elf

@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include "stateMachines.h"
 #include "led.h"
+#include "buzzer.h"
 
 char toggle_red()		/* always toggle! */
 {
@@ -9,10 +10,12 @@ char toggle_red()		/* always toggle! */
   switch (state) {
   case 0:
     red_on = 1;
+    buzzer_set_period(1000);
     state = 1;
     break;
   case 1:
     red_on = 0;
+    buzzer_set_period(0);
     state = 0;
     break;
   }
@@ -24,6 +27,7 @@ char toggle_green()	/* only toggle green if red is on!  */
   char changed = 0;
   if (red_on) {
     green_on ^= 1;
+    buzzer_set_period(3000);
     changed = 1;
   }
   return changed;
