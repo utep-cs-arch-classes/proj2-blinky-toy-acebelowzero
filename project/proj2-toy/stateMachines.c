@@ -40,10 +40,6 @@ char toggle_green()	/* only toggle green if red is on!  */
 
 
 void buzzer_stuff() {
-  if (state2_status) freq += 225;
-  else freq -= 450;
-  
-  short cycles = 2000000/freq;  // 2000000 / frequency gives us the correct period.
   buzzer_set_period(cycles);
 }
 
