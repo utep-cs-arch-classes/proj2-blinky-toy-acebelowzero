@@ -5,84 +5,162 @@
 #include "buzzer.h"
 
 
+static char dim = 0;
 
-char toggle_red()		/* always toggle! */
-{
+
+
+void led_100(){
+
+  red_on = 1;
+  green_on =1;
+  led_changed = 1;
+  led_update();
+}
+
+void led_75(){
+
   static char state = 0;
 
-  switch (state) {
-  case 0:
-    buzzer_set_period(6000);
-    red_on = 1;
-    state = 1;
-    break;
-  case 1:
-    buzzer_set_period(500);
+  int i;
+
+  if(state == 0){
+
     red_on = 0;
+    green_on = 0;
+    state = 1;
+     led_update();
+
+  } else if(state == 1){
+    red_on = 1;
+    green_on = 1;
+    state = 2;
+    led_update();
+
+  } else if(state == 2){
+    red_on = 1;
+    green_on = 1;
+    state = 3;
+   led_update();
+
+  } else if(state == 3){
+    red_on = 1;
+    green_on = 1;
     state = 0;
-    break;
-  }
-  return 1;			/* always changes an led */
-}
-
-char toggle_green()	/* only toggle green if red is on!  */
-{
-  char changed = 0;
-  if (red_on) {
-    buzzer_set_period(200);
-    green_on ^= 1;
-    changed = 1;
-  }
-  return changed;
-}
-
-
-void buzzer_stuff() {
-  buzzer_set_period(500);
-}
-
-
-
-char state0() {
-  char changed = 0;  
-  static enum {R=0, G=1} color = G;
-  switch (color) {
-  case R: changed = toggle_red(); color = G; break;
-  case G: changed = toggle_green(); color = R; break;
+     led_update();
   }
 
-  led_changed = changed;
+  led_changed = 1;
+   led_update();
+}
+
+void led_50(){
+
+  static char state = 0;
+
+  if(state == 0){
+    red_on = 0;
+    green_on = 0;
+    state = 1;
+    led_update();
+
+  } else {
+    red_on = 1;
+    green_on = 1;
+    state = 0;
+    led_update();
+  }
+  led_changed = 1;
+   led_update();
+
+}
+
+void led_25() {
+  static char count = 0;
+
+  if(count == 0) {
+    red_on = 0;
+    green_on = 0;
+    count = 1;
+    led_update();
+  }
+  else if(count == 1) {
+    red_on = 0;
+    green_on = 0;
+    count = 2;
+    led_update();
+  }
+  else if(count == 2) {
+    red_on = 1;
+    green_on = 1;
+    count = 3;
+    led_update();
+  }
+  else if(count == 3) {
+    red_on = 1;
+    green_on = 1;
+    count = 0;
+    led_update();
+  }
+  led_changed = 1;
   led_update();
+}
+
+void dimmer() {
+  switch(dim) {
+    case 0: led_25(); break;
+  }
+  
+}
+
+void (){
+  if (dim ==0){
+      dim =1;
+    }
+  else if (dim == 1){
+    dim =2;
+    // buzzer_set_period(4000);
+  }
+  else if(dim ==2){
+    // buzzer_set_period(5000);
+    dim =3;
+  }
+  else if (dim == 3){
+    // buzzer_set_period(4500);
+    dim =4;
+  }
+  else if(dim ==4){
+    // buzzer_set_period(3400);
+    dim =0;
+  }
 }
 
 void state_advance()		/* alternate between toggling red & green */
 {
   char changed = 0;  
-  if(v == 2) {
-    state = v;
-    v=0;
-  }
+  static char cou = 0;
+  static char sta = 0;
   switch(state) {
     // in state 0 by default
-    case 0: 
-      buzzer_set_period(0);
-      state0();
-      break;
-      
-    // when side button click jump to state 1 then return to state 0 when SW1 is up
-    case 1:
+    case 1: 
+        dimmer(); 
+        break;
+    case 2:
       green_on = 1;
       red_on = 0;
       changed = 1;
-      buzzer_set_period(1000);
+      // buzzer_set_period(1000);
       break;
 
-    case 2:
-      buzzer_set_period(5000);
-      green_on = 0;
-      red_on = 0;
+    case 3:
+       buzzer_set_period(2000);
+      break;
+      
+
+    case 4:
+      // buzzer_set_period(2000);
       changed = 1;
       break;
+
   }
   led_changed = changed;
   led_update();
