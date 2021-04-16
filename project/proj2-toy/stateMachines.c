@@ -79,7 +79,7 @@ void led_25() {
 
   if(count == 0) {
     red_on = 0;
-    green_on = 0;
+    green_on = 1;
     count = 1;
     led_update();
   }
@@ -108,11 +108,20 @@ void led_25() {
 void dimmer() {
   switch(dim) {
     case 0: led_25(); break;
+    case 1: led_50(); break;
+    case 2: led_75(); break;
   }
   
 }
 
-void (){
+void light_on() {
+  red_on = 1;
+  green_on =1;
+  led_changed = 1;
+  led_update();
+}
+
+void dimChange (){
   if (dim ==0){
       dim =1;
     }
@@ -152,7 +161,9 @@ void state_advance()		/* alternate between toggling red & green */
       break;
 
     case 3:
-       buzzer_set_period(2000);
+      light_on();
+      changed = 1;
+      buzzer_set_period(2000);
       break;
       
 
